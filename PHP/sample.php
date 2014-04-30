@@ -4,8 +4,8 @@ include_once "PeopleMediaApi.php";
 
 try
 {
-    $apiUsername = "developmentuser";
-    $apiPasswd = "123456";
+    $apiUsername = "";
+    $apiPasswd = "";
     
     $sid = 123; // SID
     $afId = "123456"; // Affiliate ID
