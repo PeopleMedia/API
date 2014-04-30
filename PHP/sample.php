@@ -4,27 +4,35 @@ include_once "PeopleMediaApi.php";
 
 try
 {
-    $apiUsername = "";
-    $apiPasswd = "";
+    $apiUsername = "developmentuser";
+    $apiPasswd = "123456";
     
-    $sid = 305; // SID
+    $sid = 123; // SID
     $afId = "123456"; // Affiliate ID
     
     $pmApi = new PeopleMediaApi($apiUsername, $apiPasswd, $sid, $afId);
     
     $siteID = 105;
+    $postalCode = "85286";
+    
+    // Perform a simple search without being logged in...
+    $searchParams = new ExternalSearchParameters($siteID, "Female", $postalCode);
+    $searchResults = $pmApi->SearchService->Search($searchParams);
+    
+    var_dump($searchResults);
+    
+    // Now lets validate an email address and register a new member...
     $username = "regtest05";
     $email = $username . "@testxp.com";
     $password = "test100";
     $birthDate = "1980-01-14";
     $gender = "Male";
-    $postalCode = "85286";
     $mobilePhoneNumber = null;
     $seekingGender = null;
     
-    $pmApi->RegisterEmail($siteID, $email, $sid);
+    $pmApi->RegistrationService->RegisterEmail($siteID, $email, $sid);
     
-    $member = $pmApi->RegisterMember($siteID, $email, $password, $birthDate, $gender, $postalCode, $username, $mobilePhoneNumber, $seekingGender, $sid, $affId);
+    $member = $pmApi->RegistrationService->RegisterMember($siteID, $email, $password, $birthDate, $gender, $postalCode, $username, $mobilePhoneNumber, $seekingGender, $sid, $affId);
     
     var_dump($member);
 }
