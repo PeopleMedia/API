@@ -30,9 +30,9 @@ try
     $mobilePhoneNumber = null;
     $seekingGender = null;
     
-    $pmApi->RegistrationService->RegisterEmail($siteID, $email, $sid);
+    $pmApi->RegistrationService->RegisterEmail($siteID, $email);
     
-    $member = $pmApi->RegistrationService->RegisterMember($siteID, $email, $password, $birthDate, $gender, $postalCode, $username, $mobilePhoneNumber, $seekingGender, $sid, $affId);
+    $member = $pmApi->RegistrationService->RegisterMember($siteID, $email, $password, $birthDate, $gender, $postalCode, $username, $mobilePhoneNumber, $seekingGender);
     
     var_dump($member);
 }
