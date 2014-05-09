@@ -38,3 +38,16 @@ $member = $pmApi->RegistrationService->RegisterMember($siteID, $email, $password
 
 var_dump($member);
 ```
+##Search
+#### - External Search
+An external search occurs when a member has not been registered, or is not logged in, and a search is performed.
+```php
+$siteID = 105;
+$postalCode = "85286";
+
+// Perform a simple search without being logged in...
+$searchParams = new ExternalSearchParameters($siteID, "Female", $postalCode);
+$searchResults = $pmApi->SearchService->Search($searchParams);
+
+var_dump($searchResults);
+```
