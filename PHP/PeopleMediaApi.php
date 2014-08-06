@@ -132,10 +132,10 @@ class PeopleMediaRegistrationService extends PeopleMediaService {
                 if ($this->Api->SourceId != null || $this->Api->AffiliateId != null)
                 {
                     $params["RegistrationSource"] = array();
-                    if ($affiliateId != null)
+                    if ($this->Api->AffiliateId != null)
                         $params["RegistrationSource"]["AffiliateIdentifier"] = $this->Api->AffiliateId;
                     
-                    if ($sourceId != null)
+                    if ($this->Api->SourceId != null)
                         $params["RegistrationSource"]["SourceIdentifier"] = $this->Api->SourceId;
                 }
                 
