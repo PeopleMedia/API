@@ -4,25 +4,19 @@ include_once "PeopleMediaApi.php";
 
 try
 {
-    $apiUsername = "";
-    $apiPasswd = "";
+    $apiUsername = "[api_username]";
+    $apiPasswd = "[api_passwd]";
     
-    $sid = 123; // SID
-    $afId = "123456"; // Affiliate ID
+    $sid = NULL; // SID
+    $afId = NULL; // Affiliate ID
     
     $pmApi = new PeopleMediaApi($apiUsername, $apiPasswd, $sid, $afId);
     
     $siteID = 105;
     $postalCode = "85286";
     
-    // Perform a simple search without being logged in...
-    $searchParams = new ExternalSearchParameters($siteID, "Female", $postalCode);
-    $searchResults = $pmApi->SearchService->Search($searchParams);
-    
-    var_dump($searchResults);
-    
     // Now lets validate an email address and register a new member...
-    $username = "regtest05";
+    $username = "regtest109";
     $email = $username . "@testxp.com";
     $password = "test100";
     $birthDate = "1980-01-14";
@@ -30,9 +24,11 @@ try
     $mobilePhoneNumber = null;
     $seekingGender = null;
     
+    $qAndRs = array(new Question(1, 1));
+    
     $pmApi->RegistrationService->RegisterEmail($siteID, $email);
     
-    $member = $pmApi->RegistrationService->RegisterMember($siteID, $email, $password, $birthDate, $gender, $postalCode, $username, $mobilePhoneNumber, $seekingGender);
+    $member = $pmApi->RegistrationService->RegisterMember($siteID, $email, $password, $birthDate, $gender, $postalCode, $username, $mobilePhoneNumber, $seekingGender, $questionResponses = $qAndRs);
     
     var_dump($member);
 }
