@@ -19,7 +19,6 @@ class UsernameTakenException extends Exception
     function __construct($message = "", $code = 0, $alternatives, $previous = NULL) 
     {
         $this->Alternatives = $alternatives;
-        
         parent::__construct($message, $code, $previous);
     }
 }
@@ -35,7 +34,7 @@ class WsseAuthHeader extends SoapHeader
         }    
 
         $security_sv = new SoapVar(
-        '<o:Security xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" xmlns:o="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:u="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" s:mustUnderstand="1">
+        '<o:Security xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" xmlns:o="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:u="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" s:mustunderstand="1">
             <o:UsernameToken u:Id="uuid-' . 'e1bdb25f-c13b-45f6-a785-4d6e01056eae-2938' . '">
                 <o:Username>' . htmlspecialchars($user) . '</o:Username>
                 <o:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">' . htmlspecialchars($pass) . '</o:Password>
@@ -59,6 +58,27 @@ abstract class PeopleMediaService {
 
     public abstract function GetWsdlUrl();
     public abstract function GetServiceUrl();
+}
+
+class Response {
+    public $ResponseID = null;
+    
+    function __construct($responseID)
+    {
+        $this->ResponseID = $responseID;
+    }
+}
+
+class Question {
+    
+    public $QuestionID = NULL;
+    public $Responses = array();
+    
+    function __construct($questionID, $responseID)
+    {
+        $this->QuestionID = $questionID;
+        array_push($this->Responses, new Response($responseID));
+    }
 }
 
 class PeopleMediaRegistrationService extends PeopleMediaService {
@@ -122,7 +142,7 @@ class PeopleMediaRegistrationService extends PeopleMediaService {
         }
     }
 
-    public function RegisterMember($communityId, $emailAddress, $password, $birthDate, $gender, $postalCode, $nickName, $mobilePhoneNumber = NULL, $seekingGender = NULL) 
+    public function RegisterMember($communityId, $emailAddress, $password, $birthDate, $gender, $postalCode, $nickName, $mobilePhoneNumber = NULL, $seekingGender = NULL, $questionResponses = NULL) 
     {
         try
         {
@@ -149,7 +169,7 @@ class PeopleMediaRegistrationService extends PeopleMediaService {
                             "Password"             => $password
                         );
                 
-                if ($mobilePhoneNumber != null || $seekingGender != null)
+                if ($mobilePhoneNumber != null || $seekingGender != null || $questionResponses != null)
                 {
                     $params["OptionalParameters"] = array();
                     if ($mobilePhoneNumber != null)
@@ -157,10 +177,14 @@ class PeopleMediaRegistrationService extends PeopleMediaService {
 
                     if ($seekingGender != null)
                         $params["OptionalParameters"]["SeekingGender"] = $seekingGender;
+                    
+                    if ($questionResponses != null)
+                    {
+                       $params["OptionalParameters"]["QuestionsAndResponses"] = $questionResponses;
+                    }
                 }
                 
                 $result = $this->Client->RegisterNewMember(array("registrationParameters" => $params));
-                
                 return $result;
             }
             catch (SoapFault $sf)
